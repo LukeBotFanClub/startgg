@@ -81,9 +81,8 @@ client_name = "StartGGClient"
 remote_schema_headers = {"Authorization" = "$STARTGG_TOKEN"}
 remote_schema_url = "https://api.start.gg/gql/alpha"
 queries_path = "queries.graphql"
+include_comments =  false
 
-[tool.ariadne-codegen.scalars.ID]
-type = "int"
 [tool.ariadne-codegen.scalars.Timestamp]
 type = "datetime.datetime"
 [tool.ariadne-codegen.scalars.JSON]
