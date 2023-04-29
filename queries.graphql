@@ -1,0 +1,97 @@
+query GamerTag($id: ID){
+    user(id: $id){
+        id,
+        slug,
+        player{
+            gamerTag
+        }
+    }
+}
+
+query LastResult($id: ID, $perPage: Int, $gamerTag: String){
+    user(id: $id){
+        events(query:{
+          perPage: $perPage,
+          page:1
+        }) {
+          nodes {
+            tournament {
+              name
+              id
+              shortSlug
+            }
+            id
+            name
+            numEntrants
+            state
+            standings(query:{
+              perPage: $perPage,
+              page:1
+              filter:{
+                search:{
+                  searchString: $gamerTag
+                }
+                }
+              }) {
+              nodes {
+                entrant {
+                    id
+                }
+                placement
+                isFinal
+              }
+            }
+          }
+        }
+    }
+}
+
+query Upcoming($id: ID, $perPage: Int, $gamerTag: String){
+    user(id: $id){
+        tournaments(query: {
+            perPage: $perPage,
+            page: 1,
+            filter: {
+                upcoming:true
+            }
+        }){
+            nodes{
+                name
+                id
+                shortSlug
+                startAt
+                state
+                events(limit:3){
+                  id
+                  name
+                  videogame {
+                      id
+                  }
+                  entrants(query:{filter:{name:$gamerTag}}){
+                    nodes{
+                      id
+                    }
+                  }
+                }
+            }
+        }
+    }
+}
+query InProgressResults($event_id: ID, $entrant_id: ID){
+    event(id: $event_id){
+        tournament{
+            name
+        }
+        name
+        sets(filters:{entrantIds:[$entrant_id]}){
+            nodes{
+                fullRoundText
+                displayScore
+                wPlacement
+                lPlacement
+                winnerId
+                round
+            }
+        }
+    }
+}
