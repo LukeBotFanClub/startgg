@@ -95,3 +95,551 @@ query InProgressResults($event_id: ID!, $entrant_id: ID!){
         }
     }
 }
+query EventStandings($eventId: ID!, $page: Int!, $perPage: Int!) {
+  event(id: $eventId) {
+    id
+    name
+    standings(query: {
+      perPage: $perPage,
+      page: $page
+    }){
+      nodes {
+        placement
+        entrant {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+query EventStandingsRaceFormat($eventId: ID!) {
+  event(id: $eventId) {
+    id
+    name
+    phaseGroups {
+      id
+      seeds(query: {page: 1}) {
+        nodes {
+          id
+          standings(containerType: "groups") {
+            id
+            metadata
+          }
+        }
+      }
+    }
+  }
+}
+query EventEntrants($eventId: ID!, $page: Int!, $perPage: Int!) {
+  event(id: $eventId) {
+    id
+    name
+    entrants(query: {
+      page: $page
+      perPage: $perPage
+    }) {
+      pageInfo {
+        total
+        totalPages
+      }
+      nodes {
+        id
+        participants {
+          id
+          gamerTag
+        }
+      }
+    }
+  }
+}
+query LeagueSchedule($leagueSlug: String!) {
+  league(slug: $leagueSlug) {
+    id
+    name
+    events(query: {
+      page: 1,
+      perPage: 10
+    }) {
+      pageInfo {
+        totalPages
+        total
+      }
+      nodes {
+        id
+        name
+        startAt
+        tournament {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+query LeagueStandings($leagueSlug: String!) {
+  league(slug: $leagueSlug) {
+    id
+    name
+    standings (query: {
+      page: 1,
+      perPage: 10
+    }) {
+      pageInfo {
+        totalPages
+        total
+      }
+      nodes {
+        id
+        placement
+        entrant {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+query EventSets($eventId: ID!, $page: Int!, $perPage: Int!) {
+  event(id: $eventId) {
+    id
+    name
+    sets(
+      page: $page
+      perPage: $perPage
+      sortType: STANDARD
+    ) {
+      pageInfo {
+        total
+      }
+      nodes {
+        id
+        slots {
+          id
+          entrant {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}
+query PhaseSets($phaseId: ID!, $page: Int!, $perPage: Int!) {
+  phase(id: $phaseId) {
+    id
+    name
+    sets(
+      page: $page
+      perPage: $perPage
+      sortType: STANDARD
+    ){
+      pageInfo {
+        total
+      }
+      nodes {
+        id
+        slots {
+          id
+          entrant {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}
+query PhaseGroupSets($phaseGroupId: ID!, $page:Int!, $perPage:Int!){
+  phaseGroup(id:$phaseGroupId){
+    id
+    displayIdentifier
+    sets(
+      page: $page
+      perPage: $perPage
+      sortType: STANDARD
+    ){
+      pageInfo{
+        total
+      }
+      nodes{
+        id
+        slots{
+          id
+          entrant{
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}
+query SetsAtStation($eventId: ID!, $stationNumbers: [Int]) {
+  event(id: $eventId) {
+    id
+    name
+    sets(
+      page: 1
+      perPage: 3
+      filters: {
+      stationNumbers: $stationNumbers
+    }) {
+      nodes {
+        id
+        station {
+          id
+          number
+        }
+        slots {
+          id
+          entrant {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}
+query set($setId: ID!) {
+  set(id: $setId) {
+    id
+    slots {
+      id
+      standing {
+        id
+        placement
+        stats {
+          score {
+            label
+            value
+          }
+        }
+      }
+    }
+  }
+}
+query InProgressSet($setId: ID!) {
+  set(id: $setId) {
+    state
+    slots {
+      entrant {
+        name
+      }
+      standing {
+        stats {
+          score {
+            value
+          }
+        }
+      }
+    }
+  }
+}
+query Sets($playerId: ID!) {
+  player(id: $playerId) {
+    id
+    sets(perPage: 5, page: 10) {
+      nodes {
+        id
+        displayScore
+        event {
+          id
+          name
+          tournament {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}
+query StreamQueueOnTournament($tourneySlug: String!) {
+  tournament(slug: $tourneySlug) {
+    id
+    streamQueue {
+      stream {
+        streamSource
+        streamName
+      }
+      sets {
+        id
+      }
+    }
+  }
+}
+query SetEntrants($setId: ID!) {
+  set(id: $setId) {
+    id
+    slots {
+      id
+      entrant {
+        id
+        name
+        participants {
+          id
+          gamerTag
+          connectedAccounts
+        }
+      }
+    }
+  }
+}
+query PhaseGroupsByPhase($phaseId: ID!, $page: Int!, $perPage: Int!) {
+  phase(id: $phaseId) {
+    id
+    phaseGroups(query: {
+      page: $page
+      perPage: $perPage
+    }) {
+      pageInfo {
+        total
+      }
+      nodes {
+        id
+        displayIdentifier
+      }
+    }
+  }
+}
+query PhaseSeeds($phaseId: ID!, $page: Int!, $perPage: Int!) {
+  phase(id:$phaseId) {
+    id
+    seeds(query: {
+      page: $page
+      perPage: $perPage
+    }){
+      pageInfo {
+        total
+        totalPages
+      }
+      nodes {
+        id
+        seedNum
+        entrant {
+          id
+          participants {
+            id
+            gamerTag
+          }
+        }
+      }
+    }
+  }
+}
+query PhaseSeedsTeams($phaseId: ID!, $page: Int!, $perPage: Int!) {
+  phase(id: $phaseId) {
+    id
+    seeds(query: {
+      page: $page
+      perPage: $perPage
+    }) {
+      pageInfo {
+        total
+        totalPages
+      }
+      nodes {
+        id
+        seedNum
+        entrant {
+          id
+          name
+          participants {
+            id
+            gamerTag
+          }
+        }
+      }
+    }
+  }
+}
+query PoolSeeds($phaseGroupId: ID!, $page: Int!, $perPage: Int!) {
+  phaseGroup(id: $phaseGroupId) {
+    id
+    seeds(query: {
+      page: $page
+      perPage: $perPage
+    }){
+      pageInfo {
+        total
+      }
+      nodes {
+        entrant {
+        id
+        name
+        }
+      }
+    }
+  }
+}
+query AttendeeCount($tourneySlug: String!) {
+  tournament(slug: $tourneySlug) {
+    id
+    name
+    participants(query: {}) {
+      pageInfo {
+        total
+      }
+    }
+  }
+}
+query AttendeeCountEvents($tourneySlug: String!, $eventIds: [ID]) {
+  tournament(slug: $tourneySlug) {
+    id
+    name
+    participants(query: {
+      filter: {
+        eventIds:$eventIds
+      }
+    }) {
+      pageInfo {
+        total
+      }
+    }
+  }
+}
+query TournamentsByCountry($cCode: String!, $perPage: Int!) {
+  tournaments(query: {
+    perPage: $perPage
+    filter: {
+      countryCode: $cCode
+    }
+  }) {
+    nodes {
+      id
+      name
+      countryCode
+    }
+  }
+}
+query TournamentsByState($perPage: Int, $state: String!) {
+  tournaments(query: {
+    perPage: $perPage
+    filter: {
+      addrState: $state
+    }
+  }) {
+    nodes {
+      id
+      name
+      addrState
+    }
+  }
+}
+query TournamentsByProximity($perPage: Int, $coordinates: String!, $radius: String!) {
+  tournaments(query: {
+    perPage: $perPage
+    filter: {
+      location: {
+        distanceFrom: $coordinates,
+        distance: $radius
+      }
+    }
+  }) {
+    nodes {
+      id
+      name
+      city
+    }
+  }
+}
+query TournamentsByVideogame($perPage: Int!, $videogameId: ID!) {
+  tournaments(query: {
+    perPage: $perPage
+    page: 1
+    sortBy: "startAt asc"
+    filter: {
+      past: false
+      videogameIds: [
+        $videogameId
+      ]
+    }
+  }) {
+    nodes {
+      id
+      name
+      slug
+    }
+  }
+}
+query TournamentsByVideogames($perPage: Int, $videogameIds: [ID]) {
+  tournaments(query: {
+    perPage: $perPage
+    page: 1
+    sortBy: "startAt asc"
+    filter: {
+      upcoming: true
+      videogameIds: $videogameIds
+    }
+  }) {
+    nodes {
+      id
+      name
+      slug
+    }
+  }
+}
+query TournamentsByOwner($perPage: Int!, $ownerId: ID!) {
+    tournaments(query: {
+      perPage: $perPage
+      filter: {
+        ownerId: $ownerId
+      }
+    }) {
+    nodes {
+      id
+      name
+      slug
+    }
+  }
+}
+query PrefixSearchAttendees($tourneySlug:String!, $sponsor: String!) {
+  tournament(slug: $tourneySlug) {
+    id
+    name
+    participants(query: {
+      filter: {
+        search: {
+          fieldsToSearch: ["prefix"],
+          searchString: $sponsor
+        }
+      }
+    }) {
+      nodes {
+        id
+        gamerTag
+      }
+    }
+  }
+}
+query Shop ($slug: String) {
+  shop (slug: $slug) {
+    id
+    name
+    slug
+    messages(query: {
+        page:1
+        perPage:5
+    }) {
+      nodes {
+        total
+        message
+        gamertag
+        name
+      }
+    }
+    levels(query: {
+        page:1
+        perPage:5
+    }) {
+      nodes {
+        name
+        goalAmount
+        currAmount
+        description
+      }
+    }
+  }
+}

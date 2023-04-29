@@ -78,7 +78,7 @@ pythonVersion = "3.11"
 [tool.ariadne-codegen]
 target_package_name = "startgg"
 client_name = "StartGGClient"
-remote_schema_headers = {"Authorization" = "Bearer $STARTGG_TOKEN"}
+remote_schema_headers = {"Authorization" = "$STARTGG_TOKEN"}
 remote_schema_url = "https://api.start.gg/gql/alpha"
 queries_path = "queries.graphql"
 
@@ -87,4 +87,4 @@ type = "int"
 [tool.ariadne-codegen.scalars.Timestamp]
 type = "datetime.datetime"
 [tool.ariadne-codegen.scalars.JSON]
-type = "Json"
+type = "pydantic.Json"
