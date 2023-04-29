@@ -1,5 +1,5 @@
-query GamerTag($id: ID){
-    user(id: $id){
+query GamerTag($userId: ID!){
+    user(id: $userId){
         id,
         slug,
         player{
@@ -8,8 +8,8 @@ query GamerTag($id: ID){
     }
 }
 
-query LastResult($id: ID, $perPage: Int, $gamerTag: String){
-    user(id: $id){
+query LastResult($userId: ID!, $perPage: Int!, $gamerTag: String!){
+    user(id: $userId){
         events(query:{
           perPage: $perPage,
           page:1
@@ -46,8 +46,8 @@ query LastResult($id: ID, $perPage: Int, $gamerTag: String){
     }
 }
 
-query Upcoming($id: ID, $perPage: Int, $gamerTag: String){
-    user(id: $id){
+query Upcoming($userId: ID!, $perPage: Int!, $gamerTag: String!){
+    user(id: $userId){
         tournaments(query: {
             perPage: $perPage,
             page: 1,
@@ -77,7 +77,7 @@ query Upcoming($id: ID, $perPage: Int, $gamerTag: String){
         }
     }
 }
-query InProgressResults($event_id: ID, $entrant_id: ID){
+query InProgressResults($event_id: ID!, $entrant_id: ID!){
     event(id: $event_id){
         tournament{
             name
