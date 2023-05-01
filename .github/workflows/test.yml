@@ -21,7 +21,7 @@ jobs:
       - name: Check formatting with black
         run: poetry run black --check .
       - name: Check docstring formatting with docformatter
-        run: poetry run docformatter --check luke_bot
+        run: poetry run docformatter --check startgg
       - name: Type checking with pyright
         run: poetry run pyright
       - name: Test with pytest
