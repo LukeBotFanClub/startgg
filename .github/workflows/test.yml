@@ -1,0 +1,26 @@
+name: Test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    container:
+      image: "ghcr.io/lukebotfanclub/poetry-python:3.11"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install
+        run: poetry install --with dev
+      - name: Lint with ruff
+        run: ruff .
+      - name: Check formatting with black
+        run: black --check .
+      - name: Check docstring formatting with docformatter
+        run: docformatter --check luke_bot
+      - name: Type checking with pyright
+        run: pyright
+      - name: Test with pytest
+        run: pytest
