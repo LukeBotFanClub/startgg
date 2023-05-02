@@ -11,14 +11,18 @@ jobs:
     container:
       image: "ghcr.io/lukebotfanclub/poetry-python:3.11"
     environment: publish
+    permissions:
+      id-token: write
     steps:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
       - uses: actions/checkout@v3
-      - name: Publish
-        run: poetry publish --build
+      - name: Build
+        run: poetry build
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
