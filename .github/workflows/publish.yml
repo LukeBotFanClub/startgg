@@ -13,6 +13,7 @@ jobs:
     environment: publish
     permissions:
       id-token: write
+      packages: read
     steps:
       - name: Dump GitHub context
         env:
